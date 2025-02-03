@@ -5,5 +5,4 @@ public class Modelo
 {
     [Key]
     public int Id   { get; set; }
-    
 }
