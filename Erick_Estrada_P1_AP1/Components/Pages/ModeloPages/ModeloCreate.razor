@@ -1,0 +1,56 @@
+@page "/Modelo/Create"
+@using Erick_Estrada_P1_AP1.Models
+@inject Services Services;
+@inject NavigationManager navigationManager;
+
+<PageTitle>Registro </PageTitle>
+
+
+
+<EditForm Model="@Modelo" OnValidSubmit="Guardar">
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card header text-center">
+                <h5 class="card-title">Registrar</h5>
+            </div>
+            
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">
+                        <strong>Id</strong>
+                    </label>
+                    <InputNumber class="form-control" @bind-Value="Modelo.Id" readonly=""></InputNumber>
+                </div>
+                
+                
+            </div>
+            @*Footer*@
+            <div class="card-footer mt-2 text-center">
+                <button type="submit" class="btn btn-primary bi bi-floppy">Guardar</button>
+                <a href="/Modelo" class="btn btn-secondary"><span class="bi bi-arrow-left"></span> Retroceder</a>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+</EditForm>
+
+
+
+@code
+{
+    Modelo Modelo { get; set; } = new Modelo();
+    
+
+    private async Task Guardar()
+    {
+        var creado = await Services.Guardar(Modelo);
+        if (creado)
+        {
+            navigationManager.NavigateTo("/Modelo");
+        }
+    }
+    
+}
