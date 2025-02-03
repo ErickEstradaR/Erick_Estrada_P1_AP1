@@ -1,0 +1,93 @@
+@page "/Modelo"
+@using Erick_Estrada_P1_AP1.Models
+@using Erick_Estrada_P1_AP1.Services
+@inject Services Services
+@rendermode InteractiveServer
+
+<PageTitle>Registro</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card header">
+        </div>
+        <div class="card-body">
+            <h5 class="text-center">Consulta</h5>
+            <div class="row">
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="@Filtro">
+                        <option value="" selected disabled>Elija una opci&oacute;n</option>
+                        <option value="Id">Id</option>
+                    </InputSelect>
+                </div>
+                <div class="col-4">
+                    <div class="input-group">
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick="Restablecer"></button>
+                        </div>
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar"/>
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                        <a href="/Modelo/Create" class="btn btn-success">
+                            <span class="bi bi-plus-square"></span> Crear
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-hover">
+                <thead class="table table-striped text-black">
+                    <tr>
+                        <th>Id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var modelo in ListaModelos)
+                    {
+                        <tr>
+                            <td>@modelo.Id</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    
+    public List<Modelo> ListaModelos { get; set; } = new List<Modelo>();
+    
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    
+   
+    protected override async Task OnInitializedAsync()
+    {
+
+        ListaModelos = await Services.Listar(m => m.Id > 0);
+    }
+
+    
+    private async Task Buscar()
+    {
+        if (Filtro == "Id")
+        {
+            if (int.TryParse(ValorFiltro, out int Id))
+            {
+                ListaModelos = await Services
+                    .Listar(m=>m.Id==Id);
+            }
+
+            
+        }
+       
+    }
+    
+    @*Metodo Restablecer para restablecer filtros y clientes*@
+    private async Task Restablecer()
+    {
+        ListaModelos = await Services.Listar(m=>m.Id>0);
+        Filtro = string.Empty;
+        ValorFiltro = string.Empty;
+    }
+
+}
